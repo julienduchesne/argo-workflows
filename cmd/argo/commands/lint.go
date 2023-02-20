@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
 	"github.com/argoproj/argo-workflows/v3/cmd/argo/commands/client"
@@ -50,7 +51,9 @@ func NewLintCommand() *cobra.Command {
 				DefaultNamespace: client.Namespace(),
 				Printer:          os.Stdout,
 			}
-			lint.RunLint(ctx, apiClient, lintKinds, output, offline, ops)
+			if err := lint.RunLint(ctx, apiClient, lintKinds, output, offline, ops); err != nil {
+				log.Fatal(err)
+			}
 		},
 	}
 

@@ -3,6 +3,7 @@ package clustertemplate
 import (
 	"os"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
 	"github.com/argoproj/argo-workflows/v3/cmd/argo/commands/client"
@@ -33,7 +34,9 @@ func NewLintCommand() *cobra.Command {
 				Printer:          os.Stdout,
 			}
 
-			lint.RunLint(ctx, apiClient, []string{wf.ClusterWorkflowTemplatePlural}, output, false, opts)
+			if err := lint.RunLint(ctx, apiClient, []string{wf.ClusterWorkflowTemplatePlural}, output, false, opts); err != nil {
+				log.Fatal(err)
+			}
 		},
 	}
 
